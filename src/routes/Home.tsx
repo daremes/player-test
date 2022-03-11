@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
-import { getHash } from "./getHash";
+import { getHash } from "../utils/getHash";
+import IframePlayer from "../components/IframePlayer";
 
 const EXAMPLES = [
   {
     title: "Princip slasti 1/10 - dabing, puvodni zneni, AD, titulky",
-    idec: "417233100051001"
+    idec: "417233100051001",
   },
   {
     title: "Princip slasti - 18+ labeling soucasti playlistu",
-    idec: "219254002211001"
+    idec: "219254002211001",
   },
   {
     title: "Mimořádné pořady ČT24 1. březen - indexy",
-    idec: "222411033230301"
+    idec: "222411033230301",
   },
   {
     title: "Vrazedne stiny ep 2 - labeling soucasti vastu",
-    idec: "220512120060002"
+    idec: "220512120060002",
   },
   {
     title: "Vicenasobny playlist",
-    idec: "322291310020006"
-  }
+    idec: "322291310020006",
+  },
 ];
 
 const ENVS = [
@@ -29,15 +30,14 @@ const ENVS = [
   "https://player-development.vecko.dev/",
   "https://player-staging.vecko.dev/",
   "https://player.ceskatelevize.cz",
-  "http://localhost:7000/"
+  "http://localhost:7000/",
 ];
 
-export default function App() {
+export default function Home() {
   const [loading, setLoading] = useState(true);
   const [hash, setHash] = useState("");
   const [idec, setIdec] = useState("");
   const [live, setLive] = useState("");
-  const [refreshKey, setRefreshKey] = useState(0);
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
 
@@ -121,7 +121,7 @@ export default function App() {
             id="envs"
             name="envs"
             onChange={(e) => {
-              setEnvIndex(e.target.value);
+              setEnvIndex(Number(e.target.value));
             }}
           >
             {ENVS.map((env, index) => (
@@ -134,38 +134,11 @@ export default function App() {
             (Na devu jsou vypnute reklamy. Jina prostredi by mela mit reklamy
             zapnute.)
           </div>
-        </div>
-        <div key={refreshKey}>
-          {!idec && !live && (
-            <div
-              style={{
-                position: "absolute",
-                fontSize: 24,
-                width: "100%",
-                background: "rgba(255,255,255, 0.5)"
-              }}
-            >
-              Zadej nejaky idec/live
-            </div>
-          )}
-          <iframe
-            allowFullScreen
-            allow="encrypted-media;geolocation;autoplay"
-            allowtransparency="true"
-            role="application"
-            title="testing"
-            style={{ width: 720, height: 720 * 0.5625 }}
+          <IframePlayer
+            idec={idec}
+            live={live}
             src={`${ENVS[previewEnvIndex]}?${params}`}
           />
-          <div>
-            <button
-              onClick={() => {
-                setRefreshKey((prev) => prev + 1);
-              }}
-            >
-              Reloadnout iframe
-            </button>
-          </div>
         </div>
       </div>
       <div style={{ marginTop: 32 }}>
