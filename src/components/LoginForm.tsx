@@ -35,7 +35,6 @@ const useStyles = createUseStyles({
     display: "flex",
     flexDirection: "column",
     "& input": {
-      width: "100%",
       height: 32,
       margin: "4px 0",
       fontSize: 18,
@@ -48,6 +47,9 @@ const useStyles = createUseStyles({
     padding: "6px 12px",
     color: "#fff",
     background: "#000",
+    textTransform: "uppercase",
+    height: 40,
+    fontSize: 16,
     "&:disabled": {
       color: "#ccc",
       borderColor: "#ccc",

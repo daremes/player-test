@@ -11,6 +11,10 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     fontSize: 26,
   },
+  playerWrapper: {
+    width: "100%",
+    maxWidth: 1200,
+  },
   link: {
     color: "#000",
     "&:visited": {
@@ -33,7 +37,7 @@ export default function Sons() {
           Živě
         </Link>
       </div>
-      <div>
+      <div className={classes.playerWrapper}>
         <Outlet />
       </div>
     </div>
