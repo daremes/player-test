@@ -13,6 +13,7 @@ const useStyles = createUseStyles({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 300,
+    overflow: "hidden",
   },
   icon: {
     animation: "$spin 500ms infinite linear",

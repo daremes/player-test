@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { handleSignIn } from "../utils/firebase";
 import Button from "./Button";
@@ -88,7 +88,8 @@ const LoginForm = () => {
     }
   };
 
-  const signIn = async (e: MouseEvent<HTMLButtonElement>) => {
+  const signIn = async (e: FormEvent<Element>) => {
+    e.preventDefault();
     const { email, password } = loginData;
     setLoading(true);
     const user = await handleSignIn(email, password);
@@ -99,7 +100,7 @@ const LoginForm = () => {
 
   return (
     <div>
-      <form ref={formRef} noValidate>
+      <form ref={formRef} noValidate onSubmit={signIn}>
         <div className={classes.box}>
           <h1 className={classes.title}>Login</h1>
           <div className={classes.inputGroup}>
@@ -121,12 +122,7 @@ const LoginForm = () => {
               onChange={handleValuesChange}
             />
           </div>
-          <Button
-            className={classes.submit}
-            type="submit"
-            disabled={loading}
-            onClick={signIn}
-          >
+          <Button className={classes.submit} type="submit" disabled={loading}>
             Přihlásit se
           </Button>
           {error && (

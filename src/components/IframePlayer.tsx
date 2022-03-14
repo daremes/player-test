@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
-import Spinner from "./Spinner";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -14,7 +13,6 @@ const useStyles = createUseStyles({
 
 export default function IframePlayer({ live, idec, src, onReload }: any) {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [loading, setLoading] = useState(true);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(768);
   const classes = useStyles();
@@ -46,9 +44,6 @@ export default function IframePlayer({ live, idec, src, onReload }: any) {
           title="testing"
           style={{ width, height: width * 0.5625 }}
           src={src}
-          onLoad={() => {
-            setLoading(false);
-          }}
         />
         {!idec && !live && (
           <div
@@ -64,20 +59,17 @@ export default function IframePlayer({ live, idec, src, onReload }: any) {
           </div>
         )}
       </div>
-      {loading && <Spinner />}
       <div>
-        {!loading && (
-          <button
-            onClick={() => {
-              if (onReload) {
-                onReload();
-              }
-              setRefreshKey((prev) => prev + 1);
-            }}
-          >
-            Reload
-          </button>
-        )}
+        <button
+          onClick={() => {
+            if (onReload) {
+              onReload();
+            }
+            setRefreshKey((prev) => prev + 1);
+          }}
+        >
+          Reload
+        </button>
       </div>
     </>
   );
