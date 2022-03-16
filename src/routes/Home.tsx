@@ -23,22 +23,32 @@ const EXAMPLES = [
   {
     title: "Princip slasti 1/10 - dabing, puvodni zneni, AD, titulky",
     idec: "417233100051001",
+    videoTitle: "Princip slasti 1/10",
+    showId: "1234",
   },
   {
     title: "Princip slasti - 18+ labeling soucasti playlistu",
     idec: "219254002211001",
+    videoTitle: "Princip slasti 1/10",
+    showId: "1234",
   },
   {
     title: "Mimořádné pořady ČT24 1. březen - indexy",
     idec: "222411033230301",
+    videoTitle: "Mimořádné pořady ČT24 1. březen",
+    showId: "1234",
   },
   {
     title: "Vrazedne stiny ep 2 - labeling soucasti vastu",
     idec: "220512120060002",
+    videoTitle: "Vražedné stíny 2/10",
+    showId: "1234",
   },
   {
     title: "Vicenasobny playlist",
     idec: "322291310020006",
+    videoTitle: "Nevim",
+    showId: "1234",
   },
 ];
 
@@ -58,6 +68,19 @@ export default function Home() {
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
   const classes = useStyles();
+  const [videoTitle, setVideoTitle] = useState("");
+  const [showId, setShowId] = useState("");
+
+  useEffect(() => {
+    const relevant = EXAMPLES.find((ex) => ex.idec === idec);
+    if (live || !relevant) {
+      setVideoTitle("");
+      setShowId("");
+      return;
+    }
+    setVideoTitle(relevant.videoTitle);
+    setShowId(relevant.showId);
+  }, [idec, live]);
 
   const dejMiHash = async () => {
     setLoading(true);
@@ -78,8 +101,12 @@ export default function Home() {
   }, []);
 
   const params = live
-    ? `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}`
-    : `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}`;
+    ? `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
+        videoTitle ? "&title=" + videoTitle : ""
+      }${showId ? "&showId=" + showId : ""}`
+    : `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
+        videoTitle ? "&title=" + videoTitle : ""
+      }${showId ? "&showId=" + showId : ""}`;
 
   const previewEnvIndex = envIndex % ENVS.length;
   return (
