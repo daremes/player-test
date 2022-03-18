@@ -169,26 +169,30 @@ export default function Home() {
               (Na devu jsou vypnute reklamy. Jina prostredi by mela mit reklamy
               zapnute.)
             </div>
-            <div className={classes.playerWrapper}>
-              <IframePlayer
-                idec={idec}
-                live={live}
-                src={`${ENVS[previewEnvIndex]}?${params}`}
-              />
-            </div>
+            {(idec || live) && (
+              <div className={classes.playerWrapper}>
+                <IframePlayer
+                  idec={idec}
+                  live={live}
+                  src={`${ENVS[previewEnvIndex]}?${params}`}
+                />
+              </div>
+            )}
           </div>
         </div>
-        <div>
-          {ENVS.map((env) => (
-            <div key={env} style={{ margin: "8px 0" }}>
-              <a
-                href={`${env}?${params}`}
-                target="_blank"
-                rel="noreferrer"
-              >{`${env}?${params}`}</a>
-            </div>
-          ))}
-        </div>
+        {(idec || live) && (
+          <div>
+            {ENVS.map((env) => (
+              <div key={env} style={{ margin: "8px 0" }}>
+                <a
+                  href={`${env}?${params}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >{`${env}?${params}`}</a>
+              </div>
+            ))}
+          </div>
+        )}
         <div style={{ marginTop: 32 }}>
           <b>Příklady:</b>
           {EXAMPLES.map((ex) => (
