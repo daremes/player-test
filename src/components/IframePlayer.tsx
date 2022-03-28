@@ -11,7 +11,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export default function IframePlayer({ live, idec, src, onReload }: any) {
+export default function IframePlayer({ id, src, onReload }: any) {
   const [refreshKey, setRefreshKey] = useState(0);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(768);
@@ -45,7 +45,7 @@ export default function IframePlayer({ live, idec, src, onReload }: any) {
           style={{ width, height: width * 0.5625 }}
           src={src}
         />
-        {!idec && !live && (
+        {!id && (
           <div
             style={{
               position: "absolute",

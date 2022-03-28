@@ -21,12 +21,7 @@ export default function SonsPlayer({ live, idec }: any) {
   return (
     <div>
       {hash && (
-        <IframePlayer
-          idec={idec}
-          live={live}
-          src={src}
-          onReload={regenerateHash}
-        />
+        <IframePlayer id={idec || live} src={src} onReload={regenerateHash} />
       )}
     </div>
   );

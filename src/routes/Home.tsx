@@ -8,6 +8,7 @@ const useStyles = createUseStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 48,
   },
   playerWrapper: {
     width: "100%",
@@ -20,6 +21,18 @@ const useStyles = createUseStyles({
 });
 
 const EXAMPLES = [
+  {
+    title: "Rapstory 1/10 - reklamy i pro Safari",
+    idec: "220562280010001",
+    videoTitle: "Rapstory 1/10",
+    showId: "1234",
+  },
+  {
+    title: "Bonus - Novinarky",
+    bonus: "42128",
+    videoTitle: "Novinářky",
+    showId: "1234",
+  },
   {
     title: "Princip slasti 1/10 - dabing, puvodni zneni, AD, titulky",
     idec: "417233100051001",
@@ -53,10 +66,10 @@ const EXAMPLES = [
 ];
 
 const ENVS = [
+  "https://player.ceskatelevize.cz",
   "https://player-testing.vecko.dev/",
   "https://player-development.vecko.dev/",
   "https://player-staging.vecko.dev/",
-  "https://player.ceskatelevize.cz",
   "http://localhost:7000/",
 ];
 
@@ -65,6 +78,7 @@ export default function Home() {
   const [hash, setHash] = useState("");
   const [idec, setIdec] = useState("");
   const [live, setLive] = useState("");
+  const [bonus, setBonus] = useState("");
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
   const classes = useStyles();
@@ -72,7 +86,9 @@ export default function Home() {
   const [showId, setShowId] = useState("");
 
   useEffect(() => {
-    const relevant = EXAMPLES.find((ex) => ex.idec === idec);
+    const relevant = EXAMPLES.find(
+      (ex) => ex.idec === idec || ex.bonus === bonus
+    );
     if (live || !relevant) {
       setVideoTitle("");
       setShowId("");
@@ -80,7 +96,7 @@ export default function Home() {
     }
     setVideoTitle(relevant.videoTitle);
     setShowId(relevant.showId);
-  }, [idec, live]);
+  }, [idec, live, bonus]);
 
   const dejMiHash = async () => {
     setLoading(true);
@@ -100,15 +116,28 @@ export default function Home() {
     dejMiHash();
   }, []);
 
-  const params = live
-    ? `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
-        videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}`
-    : `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
+  const getParams = () => {
+    if (live) {
+      return `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
       }${showId ? "&showId=" + showId : ""}`;
+    }
+    if (idec) {
+      return `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
+        videoTitle ? "&title=" + videoTitle : ""
+      }${showId ? "&showId=" + showId : ""}`;
+    }
+    if (bonus) {
+      return `hash=${hash}&bonus=${bonus}${autoplay ? "&autostart=true" : ""}${
+        videoTitle ? "&title=" + videoTitle : ""
+      }${showId ? "&showId=" + showId : ""}`;
+    }
+  };
+
+  const params = getParams();
 
   const previewEnvIndex = envIndex % ENVS.length;
+  const id = idec || live || bonus;
   return (
     <div className={classes.container}>
       <div className={classes.content}>
@@ -127,6 +156,9 @@ export default function Home() {
               if (live) {
                 setLive("");
               }
+              if (bonus) {
+                setBonus("");
+              }
               setIdec(e.target.value);
             }}
           />
@@ -139,10 +171,28 @@ export default function Home() {
               if (idec) {
                 setIdec("");
               }
+              if (bonus) {
+                setBonus("");
+              }
               setLive(e.target.value);
             }}
           />
-          <div>
+          <span> nebo </span>
+          <input
+            value={bonus}
+            placeholder="bonus id"
+            type="text"
+            onChange={(e) => {
+              if (idec) {
+                setIdec("");
+              }
+              if (live) {
+                setLive("");
+              }
+              setBonus(e.target.value);
+            }}
+          />
+          <div style={{ margin: "8px 0" }}>
             <input
               id="autoplay"
               type="checkbox"
@@ -165,22 +215,17 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            <div>
-              (Na devu jsou vypnute reklamy. Jina prostredi by mela mit reklamy
-              zapnute.)
-            </div>
-            {(idec || live) && (
+            {id && (
               <div className={classes.playerWrapper}>
                 <IframePlayer
-                  idec={idec}
-                  live={live}
+                  id={id}
                   src={`${ENVS[previewEnvIndex]}?${params}`}
                 />
               </div>
             )}
           </div>
         </div>
-        {(idec || live) && (
+        {id && (
           <div>
             {ENVS.map((env) => (
               <div key={env} style={{ margin: "8px 0" }}>
@@ -196,17 +241,24 @@ export default function Home() {
         <div style={{ marginTop: 32 }}>
           <b>Příklady:</b>
           {EXAMPLES.map((ex) => (
-            <div key={ex.idec} style={{ margin: "6px 0" }}>
+            <div key={ex.idec || ex.bonus} style={{ margin: "6px 0" }}>
               <div>{ex.title}</div>
               <button
                 onClick={() => {
                   if (live) {
                     setLive("");
                   }
-                  setIdec(ex.idec);
+                  if (ex.idec) {
+                    setBonus("");
+                    setIdec(ex.idec);
+                  }
+                  if (ex.bonus) {
+                    setIdec("");
+                    setBonus(ex.bonus);
+                  }
                 }}
               >
-                {ex.idec}
+                {ex.idec || ex.bonus}
               </button>
             </div>
           ))}
