@@ -17,8 +17,9 @@ function getRandomInt(max: number) {
 
 export async function getHash() {
   const index = getRandomInt(URLS.length);
-  console.info("hash fetched from: ", URLS[index], index);
-  const res = await fetch(URLS[index], {
+  const urlWithTimestamp = `${URLS[index]}?timestamp=${Date.now()}`;
+  console.info("hash fetched from: ", urlWithTimestamp, index);
+  const res = await fetch(urlWithTimestamp, {
     cache: "no-store",
   });
   const html = await res.text();

@@ -81,6 +81,7 @@ export default function Home() {
   const [bonus, setBonus] = useState("");
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
+  const [newPlaylist, setNewPlaylist] = useState(false);
   const classes = useStyles();
   const [videoTitle, setVideoTitle] = useState("");
   const [showId, setShowId] = useState("");
@@ -120,17 +121,17 @@ export default function Home() {
     if (live) {
       return `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}`;
+      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
     if (idec) {
       return `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}`;
+      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
     if (bonus) {
       return `hash=${hash}&bonus=${bonus}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}`;
+      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
   };
 
@@ -199,6 +200,14 @@ export default function Home() {
               onChange={(e) => setAutoplay(e.target.checked)}
             />
             <label htmlFor="autoplay">Autoplay</label>
+          </div>
+          <div style={{ margin: "8px 0" }}>
+            <input
+              id="newplaylist"
+              type="checkbox"
+              onChange={(e) => setNewPlaylist(e.target.checked)}
+            />
+            <label htmlFor="newplaylist">Use new live playlist</label>
           </div>
           <div style={{ margin: "12px 0" }}>
             <b>Preview zdroj: </b>
