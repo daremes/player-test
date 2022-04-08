@@ -121,17 +121,17 @@ export default function Home() {
     if (live) {
       return `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
+      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
     if (idec) {
       return `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
+      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
     if (bonus) {
       return `hash=${hash}&bonus=${bonus}${autoplay ? "&autostart=true" : ""}${
         videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&showId=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
+      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
     }
   };
 
