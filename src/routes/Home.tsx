@@ -18,6 +18,9 @@ const useStyles = createUseStyles({
     width: "100%",
     maxWidth: 1200,
   },
+  note: {
+    fontSize: 10,
+  },
 });
 
 const EXAMPLES = [
@@ -207,7 +210,10 @@ export default function Home() {
               type="checkbox"
               onChange={(e) => setNewPlaylist(e.target.checked)}
             />
-            <label htmlFor="newplaylist">Use new live playlist</label>
+            <label htmlFor="newplaylist">Nové playlisty</label>
+          </div>
+          <div className={classes.note}>
+            (11.4.2022: zatím jen pro live a testing prostředí)
           </div>
           <div style={{ margin: "12px 0" }}>
             <b>Preview zdroj: </b>
