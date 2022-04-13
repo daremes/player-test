@@ -37,6 +37,12 @@ const EXAMPLES = [
     showId: "1234",
   },
   {
+    title: "Bonus - pouze audio",
+    bonus: "32433",
+    videoTitle: "Novinářky",
+    showId: "12171864678",
+  },
+  {
     title: "Princip slasti 1/10 - dabing, puvodni zneni, AD, titulky",
     idec: "417233100051001",
     videoTitle: "Princip slasti 1/10",
