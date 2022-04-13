@@ -39,7 +39,7 @@ const EXAMPLES = [
   {
     title: "Bonus - pouze audio",
     bonus: "32433",
-    videoTitle: "Novinářky",
+    videoTitle: "1968: Dnes před 50 lety",
     showId: "12171864678",
   },
   {
