@@ -3,6 +3,12 @@ import { getHash } from "../utils/getHash";
 import IframePlayer from "../components/IframePlayer";
 import { createUseStyles } from "react-jss";
 
+const getQueryString = (params: any) => {
+  return Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+};
+
 const useStyles = createUseStyles({
   container: {
     display: "flex",
@@ -112,6 +118,7 @@ export default function Home() {
   const classes = useStyles();
   const [videoTitle, setVideoTitle] = useState("");
   const [showId, setShowId] = useState("");
+  const [showOld, setShowOld] = useState(false);
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
@@ -144,25 +151,18 @@ export default function Home() {
     dejMiHash();
   }, []);
 
-  const getParams = () => {
-    if (live) {
-      return `hash=${hash}&live=${live}${autoplay ? "&autostart=true" : ""}${
-        videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
-    }
-    if (idec) {
-      return `hash=${hash}&idec=${idec}${autoplay ? "&autostart=true" : ""}${
-        videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
-    }
-    if (bonus) {
-      return `hash=${hash}&bonus=${bonus}${autoplay ? "&autostart=true" : ""}${
-        videoTitle ? "&title=" + videoTitle : ""
-      }${showId ? "&sidp=" + showId : ""}&useNewPlaylist=${newPlaylist}`;
-    }
+  const parameters = {
+    hash,
+    autoStart: autoplay,
+    ...(live ? { live } : {}),
+    ...(idec ? { IDEC: idec } : {}),
+    ...(bonus ? { bonus } : {}),
+    ...(showId ? { sidp: showId } : {}),
+    ...(newPlaylist ? { useNewPlaylist: newPlaylist } : {}),
+    ...(videoTitle ? { title: videoTitle } : {}),
   };
 
-  const params = getParams();
+  const queryString = getQueryString(parameters);
 
   const previewEnvIndex = envIndex % ENVS.length;
   const id = idec || live || bonus;
@@ -239,6 +239,14 @@ export default function Home() {
           <div className={classes.note}>
             (11.4.2022: zatím jen pro live a testing prostředí)
           </div>
+          <div style={{ margin: "8px 0" }}>
+            <input
+              id="oldPlayer"
+              type="checkbox"
+              onChange={(e) => setShowOld(e.target.checked)}
+            />
+            <label htmlFor="oldPlayer">Zobrazit starý přehrávač</label>
+          </div>
           <div style={{ margin: "12px 0" }}>
             <b>Preview zdroj: </b>
             <select
@@ -258,8 +266,19 @@ export default function Home() {
               <div className={classes.playerWrapper}>
                 <IframePlayer
                   id={id}
-                  src={`${ENVS[previewEnvIndex]}?${params}`}
+                  src={`${ENVS[previewEnvIndex]}?${queryString}`}
                 />
+                {showOld && (
+                  <>
+                    <IframePlayer
+                      id={id}
+                      src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
+                    />
+                    <a
+                      href={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
+                    >{`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}</a>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -269,10 +288,10 @@ export default function Home() {
             {ENVS.map((env) => (
               <div key={env} style={{ margin: "8px 0" }}>
                 <a
-                  href={`${env}?${params}`}
+                  href={`${env}?${queryString}`}
                   target="_blank"
                   rel="noreferrer"
-                >{`${env}?${params}`}</a>
+                >{`${env}?${queryString}`}</a>
               </div>
             ))}
           </div>
