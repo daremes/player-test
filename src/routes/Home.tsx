@@ -166,9 +166,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [hash, setHash] = useState("");
   const [id, setId] = useState({ ...DEFAULT_OPTIONS });
-  const [idec, setIdec] = useState("");
-  const [live, setLive] = useState("");
-  const [bonus, setBonus] = useState("");
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
   const [newPlaylist, setNewPlaylist] = useState(false);
@@ -179,16 +176,16 @@ export default function Home() {
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
-      (ex) => ex.idec === idec || ex.bonus === bonus
+      (ex) => ex.idec === id.idec || ex.bonus === id.bonus
     );
-    if (live || !relevant) {
+    if (id.live || !relevant) {
       setVideoTitle("");
       setShowId("");
       return;
     }
     setVideoTitle(relevant.videoTitle);
     setShowId(relevant.showId);
-  }, [idec, live, bonus]);
+  }, [id.bonus, id.idec, id.live]);
 
   const dejMiHash = async () => {
     setLoading(true);
