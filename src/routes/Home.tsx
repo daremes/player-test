@@ -160,9 +160,12 @@ const ENVS = [
   "http://localhost:7000/",
 ];
 
+const DEFAULT_OPTIONS = { idec: "", live: "", bonus: "", videoId: "" };
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [hash, setHash] = useState("");
+  const [id, setId] = useState({ ...DEFAULT_OPTIONS });
   const [idec, setIdec] = useState("");
   const [live, setLive] = useState("");
   const [bonus, setBonus] = useState("");
@@ -208,9 +211,10 @@ export default function Home() {
   const parameters = {
     hash,
     autoStart: autoplay,
-    ...(live ? { live } : {}),
-    ...(idec ? { IDEC: idec } : {}),
-    ...(bonus ? { bonus } : {}),
+    ...(id.videoId ? { videoId: id.videoId } : {}),
+    ...(id.live ? { live: id.live } : {}),
+    ...(id.idec ? { IDEC: id.idec } : {}),
+    ...(id.bonus ? { bonus: id.bonus } : {}),
     ...(showId ? { sidp: showId } : {}),
     ...(newPlaylist ? { useNewPlaylist: newPlaylist } : {}),
     ...(videoTitle ? { title: videoTitle } : {}),
@@ -219,7 +223,7 @@ export default function Home() {
   const queryString = getQueryString(parameters);
 
   const previewEnvIndex = envIndex % ENVS.length;
-  const id = idec || live || bonus;
+  const hasId = id.idec || id.live || id.bonus || id.videoId;
   return (
     <div className={classes.container}>
       <div className={classes.content}>
@@ -231,47 +235,38 @@ export default function Home() {
         </div>
         <div style={{ margin: "24px 0" }}>
           <input
-            value={idec}
+            value={id.idec}
             placeholder="idec"
             type="text"
             onChange={(e) => {
-              if (live) {
-                setLive("");
-              }
-              if (bonus) {
-                setBonus("");
-              }
-              setIdec(e.target.value);
+              setId({ ...DEFAULT_OPTIONS, idec: e.target.value });
             }}
           />
           <span> nebo </span>
           <input
-            value={live}
+            value={id.videoId}
+            placeholder="videoId (napr. CH_24)"
+            type="text"
+            onChange={(e) => {
+              setId({ ...DEFAULT_OPTIONS, videoId: e.target.value });
+            }}
+          />
+          <span> nebo </span>
+          <input
+            value={id.live}
             placeholder="live (napr. 24) "
             type="text"
             onChange={(e) => {
-              if (idec) {
-                setIdec("");
-              }
-              if (bonus) {
-                setBonus("");
-              }
-              setLive(e.target.value);
+              setId({ ...DEFAULT_OPTIONS, live: e.target.value });
             }}
           />
           <span> nebo </span>
           <input
-            value={bonus}
+            value={id.bonus}
             placeholder="bonus id"
             type="text"
             onChange={(e) => {
-              if (idec) {
-                setIdec("");
-              }
-              if (live) {
-                setLive("");
-              }
-              setBonus(e.target.value);
+              setId({ ...DEFAULT_OPTIONS, bonus: e.target.value });
             }}
           />
           <div style={{ margin: "8px 0" }}>
@@ -316,16 +311,16 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            {id && (
+            {hasId && (
               <div className={classes.playerWrapper}>
                 <IframePlayer
-                  id={id}
+                  id={hasId}
                   src={`${ENVS[previewEnvIndex]}?${queryString}`}
                 />
                 {showOld && (
                   <>
                     <IframePlayer
-                      id={id}
+                      id={hasId}
                       src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
                     />
                     <a
@@ -337,7 +332,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        {id && (
+        {hasId && (
           <div>
             {ENVS.map((env) => (
               <div key={env} style={{ margin: "8px 0" }}>
@@ -357,17 +352,11 @@ export default function Home() {
               <div>{ex.title}</div>
               <button
                 onClick={() => {
-                  if (live) {
-                    setLive("");
-                  }
-                  if (ex.idec) {
-                    setBonus("");
-                    setIdec(ex.idec);
-                  }
-                  if (ex.bonus) {
-                    setIdec("");
-                    setBonus(ex.bonus);
-                  }
+                  setId({
+                    ...DEFAULT_OPTIONS,
+                    ...(ex.idec ? { idec: ex.idec } : {}),
+                    ...(ex.bonus ? { bonus: ex.bonus } : {}),
+                  });
                 }}
               >
                 {ex.idec || ex.bonus}
