@@ -3,6 +3,27 @@ import { getHash } from "../utils/getHash";
 import IframePlayer from "../components/IframePlayer";
 import { createUseStyles } from "react-jss";
 
+const CHANNELS = [
+  "CH_1",
+  "CH_2",
+  "CH_24",
+  "CH_4",
+  "CH_5",
+  "CH_6",
+  "CH_7",
+  "CH_1_JM",
+  "CH_1_SM",
+  "CH_25",
+  "CH_26",
+  "CH_27",
+  "CH_28",
+  "CH_29",
+  "CH_30",
+  "CH_31",
+  "CH_32",
+  "CH_MOB_01",
+];
+
 const getQueryString = (params: any) => {
   return Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
@@ -241,6 +262,7 @@ export default function Home() {
           />
           <span> nebo </span>
           <input
+            list="channels"
             value={id.videoId}
             placeholder="videoId (napr. CH_24)"
             type="text"
@@ -248,6 +270,11 @@ export default function Home() {
               setId({ ...DEFAULT_OPTIONS, videoId: e.target.value });
             }}
           />
+          <datalist id="channels">
+            {CHANNELS.map((item) => (
+              <option value={item} />
+            ))}
+          </datalist>
           <span> nebo </span>
           <input
             value={id.live}
