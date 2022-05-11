@@ -183,6 +183,10 @@ const ENVS = [
 
 const DEFAULT_OPTIONS = { idec: "", live: "", bonus: "", videoId: "" };
 
+const minutesToMillis = (minutes: number) => {
+  return minutes * 60 * 1000;
+};
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [hash, setHash] = useState("");
@@ -194,6 +198,9 @@ export default function Home() {
   const [videoTitle, setVideoTitle] = useState("");
   const [showId, setShowId] = useState("");
   const [showOld, setShowOld] = useState(false);
+  const [debugStreamPausedTimeout, setDebugStreamPausedTimeout] = useState("");
+  const [debugStreamUrlExpiredTimeout, setDebugStreamUrlExpiredTimeout] =
+    useState("");
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
@@ -236,6 +243,21 @@ export default function Home() {
     ...(showId ? { sidp: showId } : {}),
     ...(newPlaylist ? { useNewPlaylist: newPlaylist } : {}),
     ...(videoTitle ? { title: videoTitle } : {}),
+    ...(debugStreamPausedTimeout && !isNaN(Number(debugStreamPausedTimeout))
+      ? {
+          debugStreamPausedTimeout: minutesToMillis(
+            Number(debugStreamPausedTimeout)
+          ),
+        }
+      : {}),
+    ...(debugStreamUrlExpiredTimeout &&
+    !isNaN(Number(debugStreamUrlExpiredTimeout))
+      ? {
+          debugStreamUrlExpiredTimeout: minutesToMillis(
+            Number(debugStreamUrlExpiredTimeout)
+          ),
+        }
+      : {}),
   };
 
   const queryString = getQueryString(parameters);
@@ -319,6 +341,46 @@ export default function Home() {
               onChange={(e) => setShowOld(e.target.checked)}
             />
             <label htmlFor="oldPlayer">Zobrazit starý přehrávač</label>
+          </div>
+          <div
+            style={{
+              margin: "8px 0",
+            }}
+          >
+            <input
+              id="setDebugStreamPausedTimeout"
+              value={debugStreamPausedTimeout}
+              placeholder="Čas v minutách"
+              type="text"
+              style={{ maxWidth: 98 }}
+              onChange={(e) => {
+                setDebugStreamPausedTimeout(e.target.value);
+              }}
+            />
+            <label
+              htmlFor="setDebugStreamPausedTimeout"
+              style={{ marginLeft: 3 }}
+            >
+              Refetch playlistů po pauze
+            </label>
+          </div>
+          <div style={{ margin: "8px 0" }}>
+            <input
+              id="setDebugStreamUrlExpiredTimeout"
+              value={debugStreamUrlExpiredTimeout}
+              placeholder="Čas v minutách"
+              type="text"
+              style={{ maxWidth: 98 }}
+              onChange={(e) => {
+                setDebugStreamUrlExpiredTimeout(e.target.value);
+              }}
+            />
+            <label
+              htmlFor="setDebugStreamUrlExpiredTimeout"
+              style={{ marginLeft: 3 }}
+            >
+              Refetch playlistů pro přepínání mezi více stream urls
+            </label>
           </div>
           <div style={{ margin: "12px 0" }}>
             <b>Preview zdroj: </b>
