@@ -174,11 +174,12 @@ const EXAMPLES = [
 ];
 
 const ENVS = [
-  "https://player.ceskatelevize.cz",
+  "https://player.ceskatelevize.cz/",
   "https://player-testing.vecko.dev/",
   "https://player-development.vecko.dev/",
   "https://player-staging.vecko.dev/",
   "http://localhost:7000/",
+  "http://192.168.0.2:7000/",
 ];
 
 const DEFAULT_OPTIONS = { idec: "", live: "", bonus: "", videoId: "" };
