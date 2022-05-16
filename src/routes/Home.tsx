@@ -88,6 +88,13 @@ const EXAMPLES = [
     showId: "1234",
   },
   {
+    title: "Světy Jindřicha Chalupeckého - playback samostatneho indexu",
+    idec: "2222041120000120318",
+    index: "900837",
+    videoTitle: "Světy Jindřicha Chalupeckého",
+    showId: "1234",
+  },
+  {
     title: "Vrazedne stiny ep 2 - labeling soucasti vastu",
     idec: "220512120060002",
     videoTitle: "Vražedné stíny 2/10",
@@ -182,7 +189,13 @@ const ENVS = [
   "http://192.168.0.2:7000/",
 ];
 
-const DEFAULT_OPTIONS = { idec: "", live: "", bonus: "", videoId: "" };
+const DEFAULT_OPTIONS = {
+  idec: "",
+  live: "",
+  bonus: "",
+  videoId: "",
+  index: "",
+};
 
 const minutesToMillis = (minutes: number) => {
   return minutes * 60 * 1000;
@@ -241,6 +254,7 @@ export default function Home() {
     ...(id.live ? { live: id.live } : {}),
     ...(id.idec ? { IDEC: id.idec } : {}),
     ...(id.bonus ? { bonus: id.bonus } : {}),
+    ...(id.index ? { index: id.index } : {}),
     ...(showId ? { sidp: showId } : {}),
     ...(newPlaylist ? { useNewPlaylist: newPlaylist } : {}),
     ...(videoTitle ? { title: videoTitle } : {}),
@@ -280,7 +294,11 @@ export default function Home() {
             placeholder="idec"
             type="text"
             onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, idec: e.target.value });
+              setId({
+                ...DEFAULT_OPTIONS,
+                idec: e.target.value,
+                ...(id.index ? { index: id.index } : {}),
+              });
             }}
           />
           <span> nebo </span>
@@ -443,10 +461,11 @@ export default function Home() {
                     ...DEFAULT_OPTIONS,
                     ...(ex.idec ? { idec: ex.idec } : {}),
                     ...(ex.bonus ? { bonus: ex.bonus } : {}),
+                    ...(ex.index ? { index: ex.index } : {}),
                   });
                 }}
               >
-                {ex.idec || ex.bonus}
+                {ex.index || ex.idec || ex.bonus}
               </button>
             </div>
           ))}
