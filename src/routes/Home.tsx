@@ -48,6 +48,9 @@ const useStyles = createUseStyles({
   note: {
     fontSize: 10,
   },
+  idInput: {
+    margin: 2,
+  },
 });
 
 const EXAMPLES = [
@@ -89,7 +92,7 @@ const EXAMPLES = [
   },
   {
     title: "Světy Jindřicha Chalupeckého - playback samostatneho indexu",
-    idec: "2222041120000120318",
+    // idec: "2222041120000120318",
     index: "900837",
     videoTitle: "Světy Jindřicha Chalupeckého",
     showId: "1234",
@@ -290,7 +293,7 @@ export default function Home() {
   const queryString = getQueryString(parameters);
 
   const previewEnvIndex = envIndex % ENVS.length;
-  const hasId = id.idec || id.live || id.bonus || id.videoId;
+  const hasId = id.idec || id.live || id.bonus || id.videoId || id.index;
   return (
     <div className={classes.container}>
       <div className={classes.content}>
@@ -302,6 +305,7 @@ export default function Home() {
         </div>
         <div style={{ margin: "24px 0" }}>
           <input
+            className={classes.idInput}
             value={id.idec}
             placeholder="idec"
             type="text"
@@ -309,12 +313,11 @@ export default function Home() {
               setId({
                 ...DEFAULT_OPTIONS,
                 idec: e.target.value,
-                ...(id.index ? { index: id.index } : {}),
               });
             }}
           />
-          <span> nebo </span>
           <input
+            className={classes.idInput}
             list="channels"
             value={id.videoId}
             placeholder="videoId (napr. CH_24)"
@@ -325,25 +328,34 @@ export default function Home() {
           />
           <datalist id="channels">
             {CHANNELS.map((item) => (
-              <option value={item} />
+              <option key={item} value={item} />
             ))}
           </datalist>
-          <span> nebo </span>
           <input
-            value={id.live}
-            placeholder="live (napr. 24) "
-            type="text"
-            onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, live: e.target.value });
-            }}
-          />
-          <span> nebo </span>
-          <input
+            className={classes.idInput}
             value={id.bonus}
             placeholder="bonus id"
             type="text"
             onChange={(e) => {
               setId({ ...DEFAULT_OPTIONS, bonus: e.target.value });
+            }}
+          />
+          <input
+            className={classes.idInput}
+            value={id.index}
+            placeholder="index id"
+            type="text"
+            onChange={(e) => {
+              setId({ ...DEFAULT_OPTIONS, index: e.target.value });
+            }}
+          />
+          <input
+            className={classes.idInput}
+            value={id.live}
+            placeholder="live (napr. 24) "
+            type="text"
+            onChange={(e) => {
+              setId({ ...DEFAULT_OPTIONS, live: e.target.value });
             }}
           />
           <div style={{ margin: "8px 0" }}>
@@ -465,7 +477,10 @@ export default function Home() {
         <div style={{ marginTop: 32 }}>
           <b>Příklady:</b>
           {EXAMPLES.map((ex) => (
-            <div key={ex.idec || ex.bonus} style={{ margin: "6px 0" }}>
+            <div
+              key={ex.idec || ex.bonus || ex.index}
+              style={{ margin: "6px 0" }}
+            >
               <div>{ex.title}</div>
               <button
                 onClick={() => {
