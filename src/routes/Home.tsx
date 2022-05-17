@@ -101,7 +101,25 @@ const EXAMPLES = [
     showId: "1234",
   },
   {
-    title: "Vicenasobny playlist",
+    title: "Vicenasobny playlist/indexy - Studio kamarad",
+    idec: "222553110020020",
+    videoTitle: "Nevim",
+    showId: "1234",
+  },
+  {
+    title: "Vicenasobny playlist/indexy - Studio kamarad",
+    idec: "222553110020020",
+    videoTitle: "Nevim",
+    showId: "1234",
+  },
+  {
+    title: "Vicenasobny playlist/indexy - Wifina",
+    idec: "222553112050019",
+    videoTitle: "Nevim",
+    showId: "1234",
+  },
+  {
+    title: "Vicenasobny playlist/indexy",
     idec: "322291310020006",
     videoTitle: "Nevim",
     showId: "1234",
