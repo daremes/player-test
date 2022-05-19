@@ -6,8 +6,13 @@ const useStyles = createUseStyles({
     width: "100%",
     height: "100%",
     margin: "12px 0",
-    border: "none",
     position: "relative",
+    background: "transparent",
+  },
+  player: {
+    boxShadow: "0 2px 4px 0 rgba(0,0,0,.3)",
+    borderRadius: 4,
+    border: "none",
   },
 });
 
@@ -38,26 +43,13 @@ export default function IframePlayer({ id, src, onReload }: any) {
       <div className={classes.wrapper} key={refreshKey} ref={wrapperRef}>
         <iframe
           allowFullScreen
+          className={classes.player}
           allow="encrypted-media;geolocation;autoplay"
-          frameBorder="0"
           role="application"
           title="testing"
           style={{ width, height: width * 0.5625 }}
           src={src}
         />
-        {!id && (
-          <div
-            style={{
-              position: "absolute",
-              fontSize: 24,
-              top: 0,
-              width: "100%",
-              background: "rgba(255,255,255, 0.5)",
-            }}
-          >
-            Zadejte nejaky idec/live
-          </div>
-        )}
       </div>
       <div>
         <button

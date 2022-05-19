@@ -7,6 +7,7 @@ import SonsPlayer from "./components/SonsPlayer";
 import { useAuth } from "./utils/useAuth";
 import { createUseStyles } from "react-jss";
 import Spinner from "./components/Spinner";
+import { FaPlay } from "react-icons/fa";
 
 const useStyles = createUseStyles({
   base: {
@@ -33,8 +34,9 @@ const useStyles = createUseStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    background: "#000",
+    background: "#222",
     padding: "0 24px",
+    boxShadow: "0 2px 4px 0 rgba(0,0,0,.4)",
   },
   layout: {
     margin: "8px 16px",
@@ -54,7 +56,7 @@ export default function App() {
       <div className={classes.base}>
         <nav className={classes.navigation}>
           <Link className={classes.title} to="/">
-            <h1>Test</h1>
+            <FaPlay color="#fafafa" />
           </Link>
           <Button onClick={handleSignOut}>Odhlásit se</Button>
         </nav>

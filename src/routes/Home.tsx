@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getHash } from "../utils/getHash";
 import IframePlayer from "../components/IframePlayer";
 import { createUseStyles } from "react-jss";
@@ -40,7 +40,6 @@ const useStyles = createUseStyles({
   },
   playerWrapper: {
     width: "100%",
-    maxWidth: 900,
   },
   content: {
     width: "100%",
@@ -127,7 +126,7 @@ const EXAMPLES = [
   },
   {
     title: "Světy Jindřicha Chalupeckého",
-    type: "Jeden index",
+    type: "Index",
     // idec: "2222041120000120318",
     index: "900837",
     videoTitle: "Světy Jindřicha Chalupeckého",
@@ -297,6 +296,7 @@ export default function Home() {
   const [debugStreamPausedTimeout, setDebugStreamPausedTimeout] = useState("");
   const [debugStreamUrlExpiredTimeout, setDebugStreamUrlExpiredTimeout] =
     useState("");
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
@@ -310,6 +310,13 @@ export default function Home() {
     setVideoTitle(relevant.videoTitle);
     setShowId(relevant.showId);
   }, [id.bonus, id.idec, id.live]);
+
+  const scrollToVideo = () => {
+    if (!anchorRef.current) {
+      return;
+    }
+    anchorRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   const dejMiHash = async () => {
     setLoading(true);
@@ -507,6 +514,7 @@ export default function Home() {
                 </option>
               ))}
             </select>
+            <div ref={anchorRef} />
             {hasId && (
               <div className={classes.playerWrapper}>
                 <IframePlayer
@@ -559,6 +567,7 @@ export default function Home() {
                         ...(ex.bonus ? { bonus: ex.bonus } : {}),
                         ...(ex.index ? { index: ex.index } : {}),
                       });
+                      scrollToVideo();
                     }}
                   >
                     <FaPlay color="#fafafa" />
