@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getHash } from "../utils/getHash";
 import IframePlayer from "../components/IframePlayer";
 import { createUseStyles } from "react-jss";
@@ -318,7 +318,7 @@ export default function Home() {
     anchorRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const dejMiHash = async () => {
+  const dejMiHash = useCallback(async () => {
     setLoading(true);
     setHash("Loading!");
     try {
@@ -330,11 +330,11 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     dejMiHash();
-  }, []);
+  }, [dejMiHash]);
 
   const parameters = {
     hash,
