@@ -52,7 +52,7 @@ export const getLegacyPlayerHash = (hashSalt: string, date = new Date()) => {
   return sha1.create().update(getHashSalt(hashSalt, date)).hex();
 };
 
-export async function getHash() {
+export function getHash() {
   const hash = getLegacyPlayerHash("ifRmpl8Ar");
   return hash;
 }

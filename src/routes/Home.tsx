@@ -79,6 +79,16 @@ const useStyles = createUseStyles({
     color: "#111",
     wordWrap: "break-word",
   },
+  popup: {
+    position: "fixed",
+    bottom: 0,
+    right: 0,
+    background: "rgba(0,0,0,0.6)",
+    color: "#fff",
+  },
+  popupInner: {
+    padding: 8,
+  },
 });
 
 const EXAMPLES = [
@@ -283,8 +293,8 @@ const minutesToMillis = (minutes: number) => {
 };
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [hash, setHash] = useState("");
+  const previousHash = useRef(getHash());
+  const [hash, setHash] = useState(previousHash.current);
   const [id, setId] = useState({ ...DEFAULT_OPTIONS });
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
@@ -318,23 +328,15 @@ export default function Home() {
     anchorRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const dejMiHash = useCallback(async () => {
-    setLoading(true);
-    setHash("Loading!");
-    try {
-      const hash = await getHash();
+  const refreshHash = useCallback(() => {
+    const hash = getHash();
+    if (hash !== previousHash.current) {
+      previousHash.current = hash;
       setHash(hash);
-    } catch (e) {
-      console.log("Smula", e);
-      setHash("Error!");
-    } finally {
-      setLoading(false);
+      console.info("Iframe hash has just been refreshed:", hash);
     }
+    console.log(".");
   }, []);
-
-  useEffect(() => {
-    dejMiHash();
-  }, [dejMiHash]);
 
   const parameters = {
     hash,
@@ -369,226 +371,226 @@ export default function Home() {
   const previewEnvIndex = envIndex % ENVS.length;
   const hasId = id.idec || id.live || id.bonus || id.videoId || id.index;
   return (
-    <div className={classes.container}>
-      <div className={classes.content}>
-        <textarea style={{ width: 340 }} readOnly value={hash} />
-        <div>
-          <button disabled={loading} onClick={dejMiHash}>
-            Refresh hash
-          </button>
-        </div>
-        <div style={{ margin: "24px 0" }}>
-          <input
-            className={classes.idInput}
-            value={id.idec}
-            placeholder="idec"
-            type="text"
-            onChange={(e) => {
-              setId({
-                ...DEFAULT_OPTIONS,
-                idec: e.target.value,
-              });
-            }}
-          />
-          <input
-            className={classes.idInput}
-            list="channels"
-            value={id.videoId}
-            placeholder="videoId (napr. CH_24)"
-            type="text"
-            onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, videoId: e.target.value });
-            }}
-          />
-          <datalist id="channels">
-            {CHANNELS.map((item) => (
-              <option key={item} value={item} />
-            ))}
-          </datalist>
-          <input
-            className={classes.idInput}
-            value={id.bonus}
-            placeholder="bonus id"
-            type="text"
-            onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, bonus: e.target.value });
-            }}
-          />
-          <input
-            className={classes.idInput}
-            value={id.index}
-            placeholder="index id"
-            type="text"
-            onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, index: e.target.value });
-            }}
-          />
-          <input
-            className={classes.idInput}
-            value={id.live}
-            placeholder="live (napr. 24) "
-            type="text"
-            onChange={(e) => {
-              setId({ ...DEFAULT_OPTIONS, live: e.target.value });
-            }}
-          />
-          <div style={{ margin: "8px 0" }}>
-            <input
-              id="autoplay"
-              type="checkbox"
-              onChange={(e) => setAutoplay(e.target.checked)}
-            />
-            <label htmlFor="autoplay">Autoplay</label>
+    <>
+      <div className={classes.container}>
+        <div className={classes.content}>
+          <textarea style={{ width: 340 }} readOnly value={hash} />
+          <div>
+            <button onClick={refreshHash}>Refresh hash</button>
           </div>
-          <div style={{ margin: "8px 0" }}>
+          <div style={{ margin: "24px 0" }}>
             <input
-              id="newplaylist"
-              type="checkbox"
-              onChange={(e) => setNewPlaylist(e.target.checked)}
-            />
-            <label htmlFor="newplaylist">Nové playlisty</label>
-          </div>
-          <div className={classes.note}>
-            (11.4.2022: zatím jen pro live a testing prostředí)
-          </div>
-          <div style={{ margin: "8px 0" }}>
-            <input
-              id="oldPlayer"
-              type="checkbox"
-              onChange={(e) => setShowOld(e.target.checked)}
-            />
-            <label htmlFor="oldPlayer">Zobrazit starý přehrávač</label>
-          </div>
-          <div
-            style={{
-              margin: "8px 0",
-            }}
-          >
-            <input
-              id="setDebugStreamPausedTimeout"
-              value={debugStreamPausedTimeout}
-              placeholder="Čas v minutách"
+              className={classes.idInput}
+              value={id.idec}
+              placeholder="idec"
               type="text"
-              style={{ maxWidth: 98 }}
               onChange={(e) => {
-                setDebugStreamPausedTimeout(e.target.value);
+                setId({
+                  ...DEFAULT_OPTIONS,
+                  idec: e.target.value,
+                });
               }}
             />
-            <label
-              htmlFor="setDebugStreamPausedTimeout"
-              style={{ marginLeft: 3 }}
-            >
-              Refetch playlistů po pauze
-            </label>
-          </div>
-          <div style={{ margin: "8px 0" }}>
             <input
-              id="setDebugStreamUrlExpiredTimeout"
-              value={debugStreamUrlExpiredTimeout}
-              placeholder="Čas v minutách"
+              className={classes.idInput}
+              list="channels"
+              value={id.videoId}
+              placeholder="videoId (napr. CH_24)"
               type="text"
-              style={{ maxWidth: 98 }}
               onChange={(e) => {
-                setDebugStreamUrlExpiredTimeout(e.target.value);
+                setId({ ...DEFAULT_OPTIONS, videoId: e.target.value });
               }}
             />
-            <label
-              htmlFor="setDebugStreamUrlExpiredTimeout"
-              style={{ marginLeft: 3 }}
-            >
-              Refetch playlistů pro přepínání mezi více stream urls
-            </label>
-          </div>
-          <div style={{ margin: "12px 0" }}>
-            <b>Preview zdroj: </b>
-            <select
-              id="envs"
-              name="envs"
-              onChange={(e) => {
-                setEnvIndex(Number(e.target.value));
-              }}
-            >
-              {ENVS.map((env, index) => (
-                <option key={env} value={index}>
-                  {env}
-                </option>
+            <datalist id="channels">
+              {CHANNELS.map((item) => (
+                <option key={item} value={item} />
               ))}
-            </select>
-            <div ref={anchorRef} />
-            {hasId && (
-              <div className={classes.playerWrapper}>
-                <IframePlayer
-                  id={hasId}
-                  src={`${ENVS[previewEnvIndex]}?${queryString}`}
-                />
-                {showOld && (
-                  <>
-                    <IframePlayer
-                      id={hasId}
-                      src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
-                    />
-                    <a
-                      href={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
-                    >{`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}</a>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-        {hasId && (
-          <div style={{ margin: "8px 0" }}>
-            <a
-              className={classes.link}
-              href={`${ENVS[envIndex]}?${queryString}`}
-              target="_blank"
-              rel="noreferrer"
-            >{`${ENVS[envIndex]}?${queryString}`}</a>
-          </div>
-        )}
-        <div style={{ marginTop: 32 }}>
-          {categorized.map((category) => (
+            </datalist>
+            <input
+              className={classes.idInput}
+              value={id.bonus}
+              placeholder="bonus id"
+              type="text"
+              onChange={(e) => {
+                setId({ ...DEFAULT_OPTIONS, bonus: e.target.value });
+              }}
+            />
+            <input
+              className={classes.idInput}
+              value={id.index}
+              placeholder="index id"
+              type="text"
+              onChange={(e) => {
+                setId({ ...DEFAULT_OPTIONS, index: e.target.value });
+              }}
+            />
+            <input
+              className={classes.idInput}
+              value={id.live}
+              placeholder="live (napr. 24) "
+              type="text"
+              onChange={(e) => {
+                setId({ ...DEFAULT_OPTIONS, live: e.target.value });
+              }}
+            />
+            <div style={{ margin: "8px 0" }}>
+              <input
+                id="autoplay"
+                type="checkbox"
+                onChange={(e) => setAutoplay(e.target.checked)}
+              />
+              <label htmlFor="autoplay">Autoplay</label>
+            </div>
+            <div style={{ margin: "8px 0" }}>
+              <input
+                id="newplaylist"
+                type="checkbox"
+                onChange={(e) => setNewPlaylist(e.target.checked)}
+              />
+              <label htmlFor="newplaylist">Nové playlisty</label>
+            </div>
+            <div className={classes.note}>
+              (11.4.2022: zatím jen pro live a testing prostředí)
+            </div>
+            <div style={{ margin: "8px 0" }}>
+              <input
+                id="oldPlayer"
+                type="checkbox"
+                onChange={(e) => setShowOld(e.target.checked)}
+              />
+              <label htmlFor="oldPlayer">Zobrazit starý přehrávač</label>
+            </div>
             <div
-              className={classes.categoryWrapper}
-              key={JSON.stringify(category)}
+              style={{
+                margin: "8px 0",
+              }}
             >
-              <div className={classes.categoryTitle}>{category[0].type}</div>
-              {category.map((ex: any) => (
-                <div
-                  className={classes.exampleWrapper}
-                  key={ex.idec || ex.bonus || ex.index}
-                >
-                  <button
-                    className={classes.playButton}
-                    onClick={() => {
-                      setId({
-                        ...DEFAULT_OPTIONS,
-                        ...(ex.idec ? { idec: ex.idec } : {}),
-                        ...(ex.bonus ? { bonus: ex.bonus } : {}),
-                        ...(ex.index ? { index: ex.index } : {}),
-                      });
-                      scrollToVideo();
-                    }}
+              <input
+                id="setDebugStreamPausedTimeout"
+                value={debugStreamPausedTimeout}
+                placeholder="Čas v minutách"
+                type="text"
+                style={{ maxWidth: 98 }}
+                onChange={(e) => {
+                  setDebugStreamPausedTimeout(e.target.value);
+                }}
+              />
+              <label
+                htmlFor="setDebugStreamPausedTimeout"
+                style={{ marginLeft: 3 }}
+              >
+                Refetch playlistů po pauze
+              </label>
+            </div>
+            <div style={{ margin: "8px 0" }}>
+              <input
+                id="setDebugStreamUrlExpiredTimeout"
+                value={debugStreamUrlExpiredTimeout}
+                placeholder="Čas v minutách"
+                type="text"
+                style={{ maxWidth: 98 }}
+                onChange={(e) => {
+                  setDebugStreamUrlExpiredTimeout(e.target.value);
+                }}
+              />
+              <label
+                htmlFor="setDebugStreamUrlExpiredTimeout"
+                style={{ marginLeft: 3 }}
+              >
+                Refetch playlistů pro přepínání mezi více stream urls
+              </label>
+            </div>
+            <div style={{ margin: "12px 0" }}>
+              <b>Preview zdroj: </b>
+              <select
+                id="envs"
+                name="envs"
+                onChange={(e) => {
+                  setEnvIndex(Number(e.target.value));
+                }}
+              >
+                {ENVS.map((env, index) => (
+                  <option key={env} value={index}>
+                    {env}
+                  </option>
+                ))}
+              </select>
+              <div ref={anchorRef} />
+              {hasId && (
+                <div className={classes.playerWrapper}>
+                  <IframePlayer
+                    id={hasId}
+                    src={`${ENVS[previewEnvIndex]}?${queryString}`}
+                  />
+                  {showOld && (
+                    <>
+                      <IframePlayer
+                        id={hasId}
+                        src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
+                      />
+                      <a
+                        href={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
+                      >{`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}</a>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+          {hasId && (
+            <div style={{ margin: "8px 0" }}>
+              <a
+                className={classes.link}
+                href={`${ENVS[envIndex]}?${queryString}`}
+                target="_blank"
+                rel="noreferrer"
+              >{`${ENVS[envIndex]}?${queryString}`}</a>
+            </div>
+          )}
+          <div style={{ marginTop: 32 }}>
+            {categorized.map((category) => (
+              <div
+                className={classes.categoryWrapper}
+                key={JSON.stringify(category)}
+              >
+                <div className={classes.categoryTitle}>{category[0].type}</div>
+                {category.map((ex: any) => (
+                  <div
+                    className={classes.exampleWrapper}
+                    key={ex.idec || ex.bonus || ex.index}
                   >
-                    <FaPlay color="#fafafa" />
-                  </button>
-                  <div className={classes.exampleDescription}>
-                    <div>{ex.title}</div>
-                    <div>
-                      <div className={classes.exampleId}>
-                        {`${ex.idec ? `idec ${ex.idec}` : ""}`}
-                        {`${ex.bonus ? `bonus ${ex.bonus}` : ""}`}
-                        {`${ex.index ? `index ${ex.index}` : ""}`}
+                    <button
+                      className={classes.playButton}
+                      onClick={() => {
+                        setId({
+                          ...DEFAULT_OPTIONS,
+                          ...(ex.idec ? { idec: ex.idec } : {}),
+                          ...(ex.bonus ? { bonus: ex.bonus } : {}),
+                          ...(ex.index ? { index: ex.index } : {}),
+                        });
+                        scrollToVideo();
+                      }}
+                    >
+                      <FaPlay color="#fafafa" />
+                    </button>
+                    <div className={classes.exampleDescription}>
+                      <div>{ex.title}</div>
+                      <div>
+                        <div className={classes.exampleId}>
+                          {`${ex.idec ? `idec ${ex.idec}` : ""}`}
+                          {`${ex.bonus ? `bonus ${ex.bonus}` : ""}`}
+                          {`${ex.index ? `index ${ex.index}` : ""}`}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-              <hr />
-            </div>
-          ))}
+                ))}
+                <hr />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
