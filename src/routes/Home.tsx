@@ -461,9 +461,6 @@ export default function Home() {
               />
               <label htmlFor="newplaylist">Nové playlisty</label>
             </div>
-            <div className={classes.note}>
-              (11.4.2022: zatím jen pro live a testing prostředí)
-            </div>
             <div style={{ margin: "8px 0" }}>
               <input
                 id="oldPlayer"
