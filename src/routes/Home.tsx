@@ -91,9 +91,24 @@ const useStyles = createUseStyles({
   },
 });
 
+enum ExampleTypesEnum {
+  cc = "Closed captions",
+  audioOnly = "Audio only",
+  audioDescription = "Audio description",
+  labeling = "Labeling",
+  indexy = "Indexy",
+  index = "Konkrétní index",
+  reklamy = "Reklamy",
+  bonus = "Bonus",
+  complexVOD = "Audio stopy, titulky, AD, labeling",
+  vicenasobnyPlaylist = "Vícenásobný playlist",
+  kvality = "Kvality",
+  ostatni = "Ostatní",
+}
+
 type Example = {
   title: string;
-  type: string;
+  type: ExampleTypesEnum;
   videoTitle: string;
   showId: string;
   idec?: string;
@@ -103,50 +118,43 @@ type Example = {
 
 const EXAMPLES: Example[] = [
   {
-    title: "Rapstory 1/10",
-    type: "Reklamy i pro Safari",
-    idec: "220562280010001",
-    videoTitle: "Rapstory 1/10",
-    showId: "1234",
-  },
-  {
-    title: "Novinarky",
-    type: "Bonus",
-    bonus: "42128",
-    videoTitle: "Novinářky",
-    showId: "1234",
-  },
-  {
-    title: "Pouze audio",
-    type: "Audio only",
-    bonus: "32433",
-    videoTitle: "1968: Dnes před 50 lety",
-    showId: "12171864678",
-  },
-  {
     title: "Princip slasti 1/10",
-    type: "Dabing, puvodni zneni, AD, titulky",
+    type: ExampleTypesEnum.complexVOD,
     idec: "417233100051001",
     videoTitle: "Princip slasti 1/10",
     showId: "1234",
   },
   {
     title: "Princip slasti",
-    type: "18+ labeling soucasti playlistu",
+    type: ExampleTypesEnum.labeling,
     idec: "219254002211001",
     videoTitle: "Princip slasti 1/10",
     showId: "1234",
   },
   {
+    title: "Pouze audio",
+    type: ExampleTypesEnum.audioOnly,
+    bonus: "32433",
+    videoTitle: "1968: Dnes před 50 lety",
+    showId: "12171864678",
+  },
+  {
+    title: "Novinarky",
+    type: ExampleTypesEnum.bonus,
+    bonus: "42128",
+    videoTitle: "Novinářky",
+    showId: "1234",
+  },
+  {
     title: "Mimořádné pořady ČT24 1. březen",
-    type: "Indexy",
+    type: ExampleTypesEnum.indexy,
     idec: "222411033230301",
     videoTitle: "Mimořádné pořady ČT24 1. březen",
     showId: "1234",
   },
   {
     title: "Světy Jindřicha Chalupeckého",
-    type: "Index",
+    type: ExampleTypesEnum.index,
     // idec: "2222041120000120318",
     index: "900837",
     videoTitle: "Světy Jindřicha Chalupeckého",
@@ -154,115 +162,122 @@ const EXAMPLES: Example[] = [
   },
   {
     title: "Vrazedne stiny ep 2",
-    type: "Labeling soucasti vastu",
+    type: ExampleTypesEnum.labeling,
     idec: "220512120060002",
     videoTitle: "Vražedné stíny 2/10",
     showId: "1234",
   },
   {
     title: "Studio kamarad",
-    type: "Vicenasobny playlist/indexy",
+    type: ExampleTypesEnum.vicenasobnyPlaylist,
     idec: "222553110020020",
     videoTitle: "Nevim",
     showId: "1234",
   },
   {
     title: "Wifina",
-    type: "Vicenasobny playlist/indexy",
+    type: ExampleTypesEnum.vicenasobnyPlaylist,
     idec: "222553112050019",
     videoTitle: "Nevim",
     showId: "1234",
   },
   {
     title: "Neco",
-    type: "Vicenasobny playlist/indexy",
+    type: ExampleTypesEnum.vicenasobnyPlaylist,
     idec: "322291310020006",
     videoTitle: "Nevim",
     showId: "1234",
   },
   {
     title: "Cyklotoulky",
-    type: "Audio description",
+    type: ExampleTypesEnum.audioDescription,
     idec: "221471292050042",
     videoTitle: "Cyklotoulky Opava",
     showId: "1234",
   },
   {
     title: "Angličtina s Hurvínkem",
-    type: "Audio description",
+    type: ExampleTypesEnum.audioDescription,
     idec: "214542157910035",
     videoTitle: "Angličtina s Hurvínkem",
     showId: "1234",
   },
   {
-    title: "Klobouček / Dan Bárta trio",
-    type: "Pouze jedna kvalita",
+    title: "Reklamy i pro Safari: Rapstory 1/10",
+    type: ExampleTypesEnum.reklamy,
+    idec: "220562280010001",
+    videoTitle: "Rapstory 1/10",
+    showId: "1234",
+  },
+  {
+    title: "Pouze jedna kvalita: Dan Bárta trio",
+    type: ExampleTypesEnum.kvality,
     idec: "21154215446",
     videoTitle: "Klobouček / Dan Bárta trio",
     showId: "1234",
   },
   {
-    title: "Země orlů",
-    type: "Omezeny set kvalit",
+    title: "Omezeny set kvalit: Země orlů",
+    type: ExampleTypesEnum.kvality,
     idec: "26153232260",
     videoTitle: "Země orlů",
     showId: "1234",
   },
   {
-    title: "Písničky pro pamětníky",
-    type: "Bez FullHD",
+    title: "Bez FullHD: Písničky pro pamětníky",
+    type: ExampleTypesEnum.kvality,
     idec: "27832024069",
     videoTitle: "Písničky pro pamětníky",
     showId: "1234",
   },
   {
-    title: "Pocasi",
-    type: "Video pod 5min",
-    idec: "206411000400124",
-    videoTitle: "Pocasi",
-    showId: "1234",
-  },
-  {
-    title: "O pohár prezidenta ČTS",
-    type: "Video nad 5h",
-    idec: "220471291352003",
-    videoTitle: "O pohár prezidenta ČTS",
-    showId: "1234",
-  },
-  {
-    title: "Území strachu",
-    type: "4:3 aspect ratio",
-    idec: "28631033712",
-    videoTitle: "Území strachu",
-    showId: "1234",
-  },
-  {
-    title: "Kosovo - krev není voda",
-    type: "Non-provys",
-    idec: "21225100058",
-    videoTitle: "Kosovo - krev není voda",
-    showId: "1234",
-  },
-  {
     title: "168 hodiny",
-    type: "Closed captions",
+    type: ExampleTypesEnum.cc,
     idec: "222452801100410",
     videoTitle: "10. duben",
     showId: "10117034229",
   },
   {
     title: "168 hodin",
-    type: "Closed captions",
+    type: ExampleTypesEnum.cc,
     idec: "222452801100403",
     videoTitle: "3. duben",
     showId: "10117034229",
   },
   {
     title: "168 hodin",
-    type: "Closed captions",
+    type: ExampleTypesEnum.cc,
     idec: "222452801100327",
     videoTitle: "27. březen",
     showId: "10117034229",
+  },
+  {
+    title: "Video pod 5min: Pocasi",
+    type: ExampleTypesEnum.ostatni,
+    idec: "206411000400124",
+    videoTitle: "Pocasi",
+    showId: "1234",
+  },
+  {
+    title: "Video nad 5h: O pohár prezidenta ČTS",
+    type: ExampleTypesEnum.ostatni,
+    idec: "220471291352003",
+    videoTitle: "O pohár prezidenta ČTS",
+    showId: "1234",
+  },
+  {
+    title: "4:3 aspect ratio: Území strachu",
+    type: ExampleTypesEnum.ostatni,
+    idec: "28631033712",
+    videoTitle: "Území strachu",
+    showId: "1234",
+  },
+  {
+    title: "Non-provys: Kosovo - krev není voda",
+    type: ExampleTypesEnum.ostatni,
+    idec: "21225100058",
+    videoTitle: "Kosovo - krev není voda",
+    showId: "1234",
   },
 ];
 
@@ -280,7 +295,6 @@ const getCategorized = () => {
 };
 
 const categorized = getCategorized();
-console.log(categorized);
 
 const ENVS = [
   "https://player.ceskatelevize.cz/",
