@@ -91,7 +91,17 @@ const useStyles = createUseStyles({
   },
 });
 
-const EXAMPLES = [
+type Example = {
+  title: string;
+  type: string;
+  videoTitle: string;
+  showId: string;
+  idec?: string;
+  index?: string;
+  bonus?: string;
+};
+
+const EXAMPLES: Example[] = [
   {
     title: "Rapstory 1/10",
     type: "Reklamy i pro Safari",
@@ -258,18 +268,19 @@ const EXAMPLES = [
 
 const getCategorized = () => {
   const categories: string[] = [];
-  const categorized: any[] = [];
+  const categorized: { type: string; items: Example[] }[] = [];
   EXAMPLES.forEach((example) => {
     if (!categories.includes(example.type)) {
       categories.push(example.type);
-      const sameType = EXAMPLES.filter((ex) => ex.type === example.type);
-      categorized.push(sameType);
+      const sameTypeItems = EXAMPLES.filter((ex) => ex.type === example.type);
+      categorized.push({ type: example.type, items: sameTypeItems });
     }
   });
   return categorized;
 };
 
 const categorized = getCategorized();
+console.log(categorized);
 
 const ENVS = [
   "https://player.ceskatelevize.cz/",
@@ -310,7 +321,8 @@ export default function Home() {
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
-      (ex) => ex.idec === id.idec || ex.bonus === id.bonus
+      (ex) =>
+        ex.idec === id.idec || ex.bonus === id.bonus || ex.index === id.index
     );
     if (id.live || !relevant) {
       setVideoTitle("");
@@ -319,7 +331,7 @@ export default function Home() {
     }
     setVideoTitle(relevant.videoTitle);
     setShowId(relevant.showId);
-  }, [id.bonus, id.idec, id.live]);
+  }, [id.bonus, id.idec, id.live, id.index]);
 
   const scrollToVideo = () => {
     if (!anchorRef.current) {
@@ -553,8 +565,8 @@ export default function Home() {
                 className={classes.categoryWrapper}
                 key={JSON.stringify(category)}
               >
-                <div className={classes.categoryTitle}>{category[0].type}</div>
-                {category.map((ex: any) => (
+                <div className={classes.categoryTitle}>{category.type}</div>
+                {category.items.map((ex) => (
                   <div
                     className={classes.exampleWrapper}
                     key={ex.idec || ex.bonus || ex.index}
