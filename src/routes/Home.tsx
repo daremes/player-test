@@ -132,10 +132,17 @@ const EXAMPLES: Example[] = [
     showId: "1234",
   },
   {
-    title: "Pouze audio",
+    title: "1968: Dnes před 50 lety",
     type: ExampleTypesEnum.audioOnly,
     bonus: "32433",
     videoTitle: "1968: Dnes před 50 lety",
+    showId: "12171864678",
+  },
+  {
+    title: "Horem pádem",
+    type: ExampleTypesEnum.audioOnly,
+    bonus: "31839",
+    videoTitle: "Jak „vydejchává“ manželka vaše milenecké scény?",
     showId: "12171864678",
   },
   {
