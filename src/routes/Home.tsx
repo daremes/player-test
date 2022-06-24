@@ -325,8 +325,6 @@ const minutesToMillis = (minutes: number) => {
 };
 
 export default function Home() {
-  const previousHash = useRef(getHash());
-  const [hash, setHash] = useState(previousHash.current);
   const [id, setId] = useState({ ...DEFAULT_OPTIONS });
   const [envIndex, setEnvIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
@@ -361,18 +359,17 @@ export default function Home() {
     anchorRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const refreshHash = useCallback(() => {
-    const hash = getHash();
-    if (hash !== previousHash.current) {
-      previousHash.current = hash;
-      setHash(hash);
-      console.info("Iframe hash has just been refreshed:", hash);
-    }
-    console.log(".");
-  }, []);
+  // const refreshHash = useCallback(() => {
+  //   const hash = getHash();
+  //   if (hash !== previousHash.current) {
+  //     previousHash.current = hash;
+  //     setHash(hash);
+  //     console.info("Iframe hash has just been refreshed:", hash);
+  //   }
+  //   console.log(".");
+  // }, []);
 
   const parameters = {
-    hash,
     autoStart: autoplay,
     ...(id.videoId ? { videoId: id.videoId } : {}),
     ...(id.live ? { live: id.live } : {}),
@@ -407,10 +404,6 @@ export default function Home() {
     <>
       <div className={classes.container}>
         <div className={classes.content}>
-          <textarea style={{ width: 340 }} readOnly value={hash} />
-          <div>
-            <button onClick={refreshHash}>Refresh hash</button>
-          </div>
           <div style={{ margin: "24px 0" }}>
             <input
               className={classes.idInput}
