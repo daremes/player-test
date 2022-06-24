@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getHash } from "../utils/getHash";
 import IframePlayer from "../components/IframePlayer";
 import { createUseStyles } from "react-jss";
@@ -545,17 +545,17 @@ export default function Home() {
                     id={hasId}
                     src={`${ENVS[previewEnvIndex]}?${queryString}`}
                   />
-                  {showOld && (
-                    <>
-                      <IframePlayer
-                        id={hasId}
-                        src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
-                      />
-                      <a
-                        href={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}
-                      >{`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}`}</a>
-                    </>
-                  )}
+                </div>
+              )}
+              {showOld && (
+                <div className={classes.playerWrapper}>
+                  <IframePlayer
+                    id={hasId}
+                    src={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}&hash=${getHash()}`}
+                  />
+                  <a
+                    href={`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}&hash=${getHash()}`}
+                  >{`https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?${queryString}&hash=${getHash()}`}</a>
                 </div>
               )}
             </div>
