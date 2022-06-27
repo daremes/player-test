@@ -25,6 +25,8 @@ const CHANNELS = [
   "CH_MOB_01",
 ];
 
+const ORIGINS = ["decko", "ivysilani", "artzona", "ct24", "ct4", "ctedu"];
+
 const getQueryString = (params: any) => {
   return Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
@@ -337,6 +339,7 @@ export default function Home() {
   const [debugStreamUrlExpiredTimeout, setDebugStreamUrlExpiredTimeout] =
     useState("");
   const anchorRef = useRef<HTMLDivElement>(null);
+  const [origin, setOrigin] = useState<string>("");
 
   useEffect(() => {
     const relevant = EXAMPLES.find(
@@ -377,6 +380,7 @@ export default function Home() {
     ...(id.bonus ? { bonus: id.bonus } : {}),
     ...(id.index ? { index: id.index } : {}),
     ...(showId ? { sidp: showId } : {}),
+    ...(origin ? { origin } : {}),
     ...(newPlaylist ? { useNewPlaylist: newPlaylist } : {}),
     ...(videoTitle ? { title: videoTitle } : {}),
     ...(debugStreamPausedTimeout && !isNaN(Number(debugStreamPausedTimeout))
@@ -522,6 +526,23 @@ export default function Home() {
               >
                 Refetch playlistů pro přepínání mezi více stream urls
               </label>
+            </div>
+            <div>
+              <input
+                className={classes.idInput}
+                list="origin"
+                value={origin}
+                placeholder="origin (default=iVysilani)"
+                type="text"
+                onChange={(e) => {
+                  setOrigin(e.target.value);
+                }}
+              />
+              <datalist id="origin">
+                {ORIGINS.map((item) => (
+                  <option key={item} value={item} />
+                ))}
+              </datalist>
             </div>
             <div style={{ margin: "12px 0" }}>
               <b>Preview zdroj: </b>
