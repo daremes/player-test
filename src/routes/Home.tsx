@@ -288,6 +288,13 @@ const EXAMPLES: Example[] = [
     videoTitle: "Kosovo - krev není voda",
     showId: "1234",
   },
+  {
+    title: "Wiadomości w języku polskim",
+    type: ExampleTypesEnum.ostatni,
+    idec: "222254000380028",
+    videoTitle: "Wiadomości w języku polskim",
+    showId: "1234",
+  },
 ];
 
 const getCategorized = () => {
