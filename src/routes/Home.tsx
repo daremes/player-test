@@ -320,6 +320,7 @@ const DEFAULT_OPTIONS = {
   bonus: "",
   videoId: "",
   index: "",
+  versionId: "",
 };
 
 const minutesToMillis = (minutes: number) => {
@@ -375,6 +376,7 @@ export default function Home() {
   const parameters = {
     autoStart: autoplay,
     ...(id.videoId ? { videoId: id.videoId } : {}),
+    ...(id.versionId ? { versionId: id.versionId } : {}),
     ...(id.live ? { live: id.live } : {}),
     ...(id.idec ? { IDEC: id.idec } : {}),
     ...(id.bonus ? { bonus: id.bonus } : {}),
@@ -403,7 +405,8 @@ export default function Home() {
   const queryString = getQueryString(parameters);
 
   const previewEnvIndex = envIndex % ENVS.length;
-  const hasId = id.idec || id.live || id.bonus || id.videoId || id.index;
+  const hasId =
+    id.idec || id.live || id.bonus || id.videoId || id.index || id.versionId;
   return (
     <>
       <div className={classes.container}>
@@ -452,6 +455,15 @@ export default function Home() {
               type="text"
               onChange={(e) => {
                 setId({ ...DEFAULT_OPTIONS, index: e.target.value });
+              }}
+            />
+            <input
+              className={classes.idInput}
+              value={id.versionId}
+              placeholder="versionId"
+              type="text"
+              onChange={(e) => {
+                setId({ ...DEFAULT_OPTIONS, versionId: e.target.value });
               }}
             />
             <input
