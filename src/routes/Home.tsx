@@ -629,7 +629,7 @@ export default function Home() {
                 {category.items.map((ex) => (
                   <div
                     className={classes.exampleWrapper}
-                    key={ex.idec || ex.bonus || ex.index}
+                    key={ex.idec || ex.bonus || ex.index || ex.versionId}
                   >
                     <button
                       className={classes.playButton}
@@ -639,6 +639,7 @@ export default function Home() {
                           ...(ex.idec ? { idec: ex.idec } : {}),
                           ...(ex.bonus ? { bonus: ex.bonus } : {}),
                           ...(ex.index ? { index: ex.index } : {}),
+                          ...(ex.versionId ? { versionId: ex.versionId } : {}),
                         });
                         scrollToVideo();
                       }}
@@ -652,6 +653,9 @@ export default function Home() {
                           {`${ex.idec ? `idec ${ex.idec}` : ""}`}
                           {`${ex.bonus ? `bonus ${ex.bonus}` : ""}`}
                           {`${ex.index ? `index ${ex.index}` : ""}`}
+                          {`${
+                            ex.versionId ? `verssionId ${ex.versionId}` : ""
+                          }`}
                         </div>
                       </div>
                     </div>
