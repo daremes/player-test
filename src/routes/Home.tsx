@@ -94,6 +94,7 @@ const useStyles = createUseStyles({
 });
 
 enum ExampleTypesEnum {
+  version = "VOD VersionId",
   cc = "Closed captions",
   audioOnly = "Audio only",
   audioDescription = "Audio description",
@@ -116,9 +117,17 @@ type Example = {
   idec?: string;
   index?: string;
   bonus?: string;
+  versionId?: string;
 };
 
 const EXAMPLES: Example[] = [
+  {
+    title: "Mock: Tour de France",
+    type: ExampleTypesEnum.version,
+    versionId: "1234",
+    videoTitle: "",
+    showId: "1234",
+  },
   {
     title: "Princip slasti 1/10",
     type: ExampleTypesEnum.complexVOD,
